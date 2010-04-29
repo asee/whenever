@@ -23,6 +23,10 @@ OptionParser.new do |opts|
   opts.on('-s', '--set [variables]', 'Example: --set environment=staging&path=/my/sweet/path') do |set|
     options[:set] = set if set
   end
+  opts.on('-o', '--output-crontab-file [crontab file]', 'Outputs your crontab to a specific file, in /etc/crontab format (includes the user field)') do |output_file|
+    options[:output_file] = output_file
+  end
+  
 end.parse!
 
 Whenever::CommandLine.execute(options)

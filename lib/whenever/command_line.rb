@@ -27,13 +27,15 @@ module Whenever
     
     def run
       if @options[:update]
-        write_crontab(updated_crontab)
+        new_crontab = updated_crontab
       elsif @options[:write]
-        write_crontab(whenever_cron)
+        new_crontab = whenever_cron
       else
         puts Whenever.cron(@options)
         exit(0)
       end
+      
+      write_crontab(new_crontab)
     end
     
   protected
@@ -57,11 +59,19 @@ module Whenever
     end
     
     def write_crontab(contents)
-      tmp_cron_file = Tempfile.new('whenever_tmp_cron').path
+      if @options[:output_file]
+        tmp_cron_file = File.new(@options[:output_file]).path
+      else
+        tmp_cron_file = Tempfile.new('whenever_tmp_cron').path
+      end
       File.open(tmp_cron_file, File::WRONLY | File::APPEND) do |file|
         file << contents
       end
-
+      set_user_crontab(tmp_cron_file) unless @options[:output_file]
+      return true
+    end
+    
+    def set_user_crontab(tmp_cron_file)
       command = ['crontab']
       command << "-u #{@options[:user]}" if @options[:user]
       command << tmp_cron_file

@@ -98,4 +98,21 @@ NEW_CRON
     end
   end
   
+  context "A command line write with output_file" do
+    setup do
+      File.expects(:exists?).with('config/schedule.rb').returns(true)
+      @command = Whenever::CommandLine.new(:write => true, :identifier => 'My identifier', :output_file => "foo.cron")
+      @task = "#{two_hours} /my/command"
+      Whenever.expects(:cron).returns(@task)
+    end
+    
+    should "write the crontab to a file when run" do
+      Whenever.expects(:set_user_crontab).never
+      f = File.new('/dev/null')
+      File.expects(:new).with('foo.cron').returns(f)
+      @command.run
+    end
+    
+  end
+  
 end

@@ -15,6 +15,7 @@ module Whenever
             File.read(options[:file])
           end
           pre_set(options[:set])
+          @username_to_include = options[:username_to_include]
       end
 
       eval(config)
@@ -142,7 +143,7 @@ module Whenever
       
       @jobs.each do |time, jobs|
         jobs.each do |job|
-          Whenever::Output::Cron.output(time, job) do |cron|
+          Whenever::Output::Cron.output(time, job, @username_to_include) do |cron|
             cron << "\n\n"
             
             if cron.starts_with?("@")

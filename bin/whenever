@@ -25,6 +25,7 @@ OptionParser.new do |opts|
   end
   opts.on('-o', '--output-crontab-file [crontab file]', 'Outputs your crontab to a specific file, in /etc/crontab format (includes the user field)') do |output_file|
     options[:output_file] = output_file
+    options[:username_to_include] = options[:user] || `whoami`
   end
   
 end.parse!

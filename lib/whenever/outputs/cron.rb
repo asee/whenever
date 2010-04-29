@@ -5,11 +5,12 @@ module Whenever
 
       attr_accessor :time, :task
 
-      def initialize(time = nil, task = nil, at = nil, output_redirection = nil)
+      def initialize(time = nil, task = nil, at = nil, output_redirection = nil, username_to_include = nil)
         @time = time
         @task = task
         @at   = at.is_a?(String) ? (Chronic.parse(at) || 0) : (at || 0)
         @output_redirection = output_redirection
+        @username_to_include = username_to_include
       end
 
       def self.enumerate(item)
@@ -22,16 +23,16 @@ module Whenever
         items
       end
 
-      def self.output(times, job)
+      def self.output(times, job, username_to_include = nil)
         enumerate(times).each do |time|
           enumerate(job.at).each do |at|
-            yield new(time, job.output, at, job.output_redirection).output
+            yield new(time, job.output, at, job.output_redirection, username_to_include).output
           end
         end
       end
       
       def output
-        [time_in_cron_syntax, task, output_redirection].compact.join(' ').strip
+        [time_in_cron_syntax, @username_to_include, task, output_redirection].compact.join(' ').strip
       end
 
       def time_in_cron_syntax

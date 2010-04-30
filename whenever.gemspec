@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Javan Makhmali"]
-  s.date = %q{2010-04-26}
+  s.date = %q{2010-04-29}
   s.description = %q{Clean ruby syntax for defining and deploying messy cron jobs.}
   s.email = %q{javan@javan.us}
   s.executables = ["whenever", "wheneverize"]
@@ -41,6 +41,7 @@ Gem::Specification.new do |s|
      "test/output_rake_test.rb",
      "test/output_redirection_test.rb",
      "test/output_runner_test.rb",
+     "test/output_user_test.rb",
      "test/test_helper.rb",
      "whenever.gemspec"
   ]
@@ -58,6 +59,7 @@ Gem::Specification.new do |s|
      "test/output_rake_test.rb",
      "test/output_redirection_test.rb",
      "test/output_runner_test.rb",
+     "test/output_user_test.rb",
      "test/test_helper.rb"
   ]
 

@@ -51,20 +51,24 @@ module Whenever
     def read_crontab
       return @current_crontab if @current_crontab
       
-      command = ['crontab -l']
-      command << "-u #{@options[:user]}" if @options[:user]
+      if @options[:output_file]
+        @current_crontab = File.read(@options[:output_file])
+      else
+        command = ['crontab -l']
+        command << "-u #{@options[:user]}" if @options[:user]
       
-      command_results  = %x[#{command.join(' ')} 2> /dev/null]
-      @current_crontab = $?.exitstatus.zero? ? command_results : ''
+        command_results  = %x[#{command.join(' ')} 2> /dev/null]
+        @current_crontab = $?.exitstatus.zero? ? command_results : ''
+      end
     end
     
     def write_crontab(contents)
       if @options[:output_file]
-        tmp_cron_file = File.new(@options[:output_file]).path
+        tmp_cron_file = @options[:output_file]
       else
         tmp_cron_file = Tempfile.new('whenever_tmp_cron').path
       end
-      File.open(tmp_cron_file, File::WRONLY | File::APPEND) do |file|
+      File.open(tmp_cron_file, 'a') do |file|
         file << contents
       end
       set_user_crontab(tmp_cron_file) unless @options[:output_file]

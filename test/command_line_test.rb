@@ -108,9 +108,10 @@ NEW_CRON
     
     should "write the crontab to a file when run" do
       Whenever.expects(:set_user_crontab).never
-      f = File.new('/dev/null')
-      File.expects(:new).with('foo.cron').returns(f)
+      f = File.open('/dev/null', 'a')
+      File.expects(:open).with('foo.cron', 'a').yields(f)
       @command.run
+      f.close
     end
     
   end

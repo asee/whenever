@@ -14,11 +14,12 @@ end
 load_failed = false
 begin
   require 'active_support/all'    
-rescue LoadError
+rescue LoadError, Gem::Exception # RubyGems before 1.3.3 raise this general error.  
+
   # In earlier rails versions, we activate active_support like this:
   begin
     require 'activesupport'
-  rescue LoadError
+  rescue LoadError, Gem::Exception
     load_failed = true
   end
 end

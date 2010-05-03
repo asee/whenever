@@ -52,7 +52,7 @@ module Whenever
       return @current_crontab if @current_crontab
       
       if @options[:output_file]
-        @current_crontab = File.read(@options[:output_file])
+        @current_crontab = File.read(@options[:output_file]) rescue ""
       else
         command = ['crontab -l']
         command << "-u #{@options[:user]}" if @options[:user]
@@ -68,7 +68,7 @@ module Whenever
       else
         tmp_cron_file = Tempfile.new('whenever_tmp_cron').path
       end
-      File.open(tmp_cron_file, 'a') do |file|
+      File.open(tmp_cron_file, 'w') do |file|
         file << contents
       end
       set_user_crontab(tmp_cron_file) unless @options[:output_file]

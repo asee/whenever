@@ -2,7 +2,7 @@ require 'chronic'
 
 # Hoping to load Rails' Rakefile
 begin
-  load 'Rakefile'
+  load 'Rakefile' unless defined?(ActiveSupport)
 rescue LoadError
   nil
 end
